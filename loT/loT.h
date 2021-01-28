@@ -1,18 +1,22 @@
 #include <string>
 #include <iostream>
+#include <map>
 using namespace std;
 
 //const int LOT_TYPE_LENGTH[3] = {};
 //用 map 表示 长度与种类的关系
+
+static map<int, char> length_type = {{24, '0'}, {17, '1'}, {16, '2'}};
+
 class loT
 {
 private:
     string ID;
-    int Type;
+    char Type;
     int ID_length;
 public:
     loT();
-    loT(string id, int Type);
+    loT(string id);
     loT(const loT & cp);
     loT & operator=(const loT & cp);
     ~loT();
@@ -25,13 +29,20 @@ loT::loT()
     ID_length = 7;
 }
 
-loT::loT(string id, int Type)
+loT::loT(string id)
 {
     this->ID = id;
-    this->Type = Type;
     this->ID_length = id.length();
-    cout << "success create loT" << endl;
-    cout << "ID is : " << this->ID << endl;
+    auto type = length_type.find(id.length());
+    if (type != length_type.end()){
+        this->Type = type->second;
+        cout << "success create loT" << endl;
+        cout << "ID is : " << this->ID << endl;
+    } 
+    else{
+        cout << "wrong ID: fail to create loT" << endl;
+    }
+    
 }
 
 loT::loT(const loT & cp)
