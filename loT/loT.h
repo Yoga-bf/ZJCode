@@ -17,15 +17,19 @@ private:
 public:
     loT();
     loT(string id);
+    loT(char type);
     loT(const loT & cp);
     loT & operator=(const loT & cp);
+    string GetID() {return this->ID;};
+    char GetType() {return this->Type;};
+    int GetID_length() {return this->ID_length;};
     ~loT();
 };
 
 loT::loT()
 {
     ID = "nullptr";
-    Type = -1;
+    Type = '-1';
     ID_length = 7;
 }
 
@@ -43,6 +47,13 @@ loT::loT(string id)
         cout << "wrong ID: fail to create loT" << endl;
     }
     
+}
+
+loT::loT(char type)
+{
+    ID = "nullptr";
+    Type = type;
+    ID_length = 7; 
 }
 
 loT::loT(const loT & cp)
