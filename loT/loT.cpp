@@ -6,6 +6,8 @@ loT::loT()
     ID = "nullptr";
     Type = '-1';
     ID_length = 7;
+    socketfd_write = -1;
+    socketfd_read = -1;
 }
 
 loT::loT(string id)
@@ -13,6 +15,8 @@ loT::loT(string id)
     this->ID = id;
     this->ID_length = id.length();
     auto type = length_type.find(id.length());
+    socketfd_write = -1;
+    socketfd_read = -1;
     if (type != length_type.end()){
         this->Type = type->second;
         cout << "success create loT" << endl;
@@ -28,7 +32,9 @@ loT::loT(char type)
 {
     ID = "nullptr";
     Type = type;
-    ID_length = 7; 
+    ID_length = 7;
+    socketfd_write = -1;
+    socketfd_read = -1;
 }
 
 loT::loT(const loT & cp)
@@ -36,6 +42,8 @@ loT::loT(const loT & cp)
     this->ID = cp.ID;
     this->Type = cp.Type;
     this->ID_length = cp.Type;
+    socketfd_write = -1;
+    socketfd_read = -1;
 }
 
 loT & loT::operator=(const loT & cp)
@@ -45,6 +53,8 @@ loT & loT::operator=(const loT & cp)
     ID = cp.ID;
     Type = cp.Type;
     ID_length = ID.length();
+    socketfd_write = -1;
+    socketfd_read = -1;
 }
 
 void SocketMake(char *server_ip, int SPort, int & socketfd)
