@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include "wrap.h"
 using namespace std;
 
 //const int LOT_TYPE_LENGTH[3] = {};
@@ -18,6 +19,8 @@ private:
     char Type;
     int ID_length;
 public:
+    int socketfd_read;
+    int socketfd_write;
     loT();
     loT(string id);
     loT(char type);
@@ -26,6 +29,7 @@ public:
     string GetID() {return this->ID;};
     char GetType() {return this->Type;};
     int GetID_length() {return this->ID_length;};
+    void SocketMake(char *server_ip, int SPort, int & socketfd);
     ~loT();
 };
 
