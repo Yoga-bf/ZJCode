@@ -6,6 +6,7 @@
 #include <map>
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 #include "wrap.h"
 using namespace std;
 
@@ -37,14 +38,22 @@ public:
     ~loT();
 };
 
-struct 
+
+struct shared_buff
 {
-    pthread_mutex_t mutex;
-    pthread_cond_t  cond;
-    char            buff[N];
-} shared = {
-    PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER
+    char                buff[N];
+    bool                ready;
+    int                 buff_len;
+    mutex               mtx;
+    condition_variable  cv;
 };
 
+// #ifndef LOCAL_SHARED_
+// extern shared_buff shared;
+// #endif
+
+
+void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff shared);
+void Socket_Recv(int socketfd_recv, loT & Slot, struct shared_buff shared);
 
 #endif

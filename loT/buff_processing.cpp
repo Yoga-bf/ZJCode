@@ -1,33 +1,9 @@
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/epoll.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
 #include <string>
 #include <iostream>
 #include <cstring>
+#include "buff_processing.h"
 
-#include "buff_mysocket.h"
-
-
-void Socket_Send(int socketfd_send)
-{
-    if (socketfd_send == -1)  {
-        cout << "wrong socket" << endl;
-        return;
-    }
-    while(1) {
-        //std::lock();
-    }
-}
-
-void  Socket_Recv(int socketfd_recv)
-{
-    
-}
 
 int buff_generate(char * buff, int Type, char * message, int n, loT & SloT, loT DloT)
 {
