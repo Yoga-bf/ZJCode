@@ -4,7 +4,7 @@
 loT::loT()
 {
     ID = "nullptr";
-    Type = '-1';
+    Type = DEFAULT_TYPE;
     ID_length = 7;
     socketfd_write = -1;
     socketfd_read = -1;
@@ -57,7 +57,7 @@ loT & loT::operator=(const loT & cp)
     socketfd_read = -1;
 }
 
-void SocketMake(char *server_ip, int SPort, int & socketfd)
+void loT::SocketMake(const char *server_ip, int SPort, int & socketfd)
 {
     struct sockaddr_in servaddr;
 
@@ -65,12 +65,13 @@ void SocketMake(char *server_ip, int SPort, int & socketfd)
 
     bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
-	inet_pton(AF_INET, server_ip, &servaddr.sin_addr);
+	inet_pton(AF_INET, (const char *)server_ip, &servaddr.sin_addr);
 	servaddr.sin_port = htons(SPort);
 	
 	Connect(socketfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 	
 	cout << "success connect server" << endl;
+
 }
 
 loT::~loT()
