@@ -5,10 +5,10 @@ src  = $(shell  find ./ -name "*.cpp")
 obj  = $(src:%.cpp=%.o)
 
 $(prom): $(obj)
-	$(cc) -o $(prom) $(obj)
+	$(cc) -o $(prom) $(obj) -lpthread
 
 %.o: %.cpp $(deps)
-	$(cc) -c $< -o $@
+	$(cc) -c $< -o $@ -lpthread
 
 clean:
 	rm -rf $(obj)

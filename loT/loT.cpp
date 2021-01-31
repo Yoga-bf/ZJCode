@@ -7,7 +7,7 @@ loT::loT()
     ID = "nullptr";
     Type = DEFAULT_TYPE;
     ID_length = 7;
-    socketfd_write = -1;
+    socketfd_send = -1;
     socketfd_read = -1;
 }
 
@@ -16,7 +16,7 @@ loT::loT(string id)
     this->ID = id;
     this->ID_length = id.length();
     auto type = length_type.find(id.length());
-    socketfd_write = -1;
+    socketfd_send = -1;
     socketfd_read = -1;
     if (type != length_type.end()){
         this->Type = type->second;
@@ -34,7 +34,7 @@ loT::loT(char type)
     ID = "nullptr";
     Type = type;
     ID_length = 7;
-    socketfd_write = -1;
+    socketfd_send = -1;
     socketfd_read = -1;
 }
 
@@ -43,7 +43,7 @@ loT::loT(const loT & cp)
     this->ID = cp.ID;
     this->Type = cp.Type;
     this->ID_length = cp.Type;
-    socketfd_write = -1;
+    socketfd_send = -1;
     socketfd_read = -1;
 }
 
@@ -54,7 +54,7 @@ loT & loT::operator=(const loT & cp)
     ID = cp.ID;
     Type = cp.Type;
     ID_length = ID.length();
-    socketfd_write = -1;
+    socketfd_send = -1;
     socketfd_read = -1;
     return *this;
 }
@@ -81,7 +81,7 @@ loT::~loT()
 
 }
 
-void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff shared)
+void Socket_Send(int & socketfd_send, loT & Slot, struct shared_buff *shared)
 {
 
     if (socketfd_send == -1)  {
@@ -96,21 +96,22 @@ void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff shared)
 	//sign up
 
     while(1) {
-        unique_lock<mutex> lck(shared.mtx);
-		while (!shared.ready) {
-			shared.cv.wait(lck);
+        unique_lock<mutex> lck(shared->mtx);
+		while (!shared->ready) {
+			shared->cv.wait(lck);
 		}	//wait for waking up
-		if (shared.buff[0] != 0) {
-			Write(socketfd_send, shared.buff, shared.buff_len);
-			memset(shared.buff, 0, N);
-			shared.buff_len = 0;
-			shared.ready = false;
+		if (shared->buff[0] != 0) {
+			Write(socketfd_send, shared->buff, shared->buff_len);
+            cout << "send : " << shared->buff << endl;
+			memset(shared->buff, 0, N);
+			shared->buff_len = 0;
+			shared->ready = false;
 		}
 		lck.unlock();
     }
 }
 
-void Socket_Recv(int socketfd_recv, loT & Slot, struct shared_buff shared)
+void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared)
 {
     char buffer[N] = {0};
 	int n;
@@ -118,12 +119,14 @@ void Socket_Recv(int socketfd_recv, loT & Slot, struct shared_buff shared)
 		n = Read(socketfd_recv, buffer, N);
 
 		//need a function to deal with buffer
-
-		unique_lock<mutex> lck(shared.mtx);
-		shared.ready = true;
-		shared.buff_len = n;
-		strncpy(shared.buff, buffer, n);
-		shared.cv.notify_all();
+        cout << "recv : " << buffer << endl; 
+		unique_lock<mutex> lck(shared->mtx);
+		shared->ready = true;
+		shared->buff_len = n;
+		strncpy(shared->buff, buffer, n);
+        lck.unlock();
+		shared->cv.notify_all();
+        
 	}
 	 
 }

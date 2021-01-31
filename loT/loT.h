@@ -25,7 +25,7 @@ private:
     int ID_length;
 public:
     int socketfd_read;
-    int socketfd_write;
+    int socketfd_send;
     loT();
     loT(string id);
     loT(char type);
@@ -53,7 +53,7 @@ struct shared_buff
 // #endif
 
 
-void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff shared);
-void Socket_Recv(int socketfd_recv, loT & Slot, struct shared_buff shared);
+void Socket_Send(int & socketfd_send, loT & Slot, struct shared_buff *shared);
+void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared);
 
 #endif
