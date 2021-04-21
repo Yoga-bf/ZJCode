@@ -2,6 +2,7 @@
 #include <cstring>
 #include "loT.h"
 #include "ID.h"
+#include "Socket_thread.h"
 #include "buff_processing.h"
 
 const char SERVER_IP[] = "127.0.0.1";
