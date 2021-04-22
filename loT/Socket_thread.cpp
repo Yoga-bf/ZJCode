@@ -43,11 +43,10 @@ void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared)
 		int k = Message_processing(buffer, get_length(buffer));
 		if (k == -1)
 			continue;
-		
+		cout << "recv buff is " << buffer << endl;
 		shared->mtx.lock();
 		shared->ready = true;
 		shared->buff_len = n;
-		buffer[0] = '1';
 		
 		strncpy(shared->buff, buffer, n);
         Socket_Send(socketfd_recv, Slot, shared, 2);
@@ -145,6 +144,6 @@ int Message_processing(char *message, int MesLen)
 	memcpy(&mmessage[1], &message[2+DLength], SLength+1);
 	memcpy(&mmessage[2+SLength], &message[1], DLength+1);
 	memcpy(message, mmessage, 3+DLength+SLength);
-	
+
 	return 0;
 }
