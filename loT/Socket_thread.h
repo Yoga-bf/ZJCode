@@ -25,7 +25,9 @@ struct shared_buff
 // #endif
 
 
-void Socket_Send(int & socketfd_send, loT & Slot, struct shared_buff *shared, int Type);
+void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff *shared, int Type);
 void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared);
+int get_length(char *buf);
+void User_input(loT & lot, struct shared_buff *shared);
 
 #endif

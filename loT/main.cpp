@@ -18,36 +18,13 @@ int main()
 
     loT lot(h1_ID);
     lot.SocketMake(SERVER_IP, PORT, lot.socketfd);
-    //lot.SocketMake(SERVER_IP, PORT, lot.socketfd);
     
-    Socket_Send(lot.socketfd, lot, shared, 0);  //Sign up
+    Socket_Send(lot.socketfd, lot, shared, SignM);  //Sign up
 
-    //thread socketsend(Socket_Send, std::ref(lot.socketfd), std::ref(lot), shared);
     thread socketrecv(Socket_Recv, std::ref(lot.socketfd), std::ref(lot), shared);
-    //socketsend.join();
     
-    loT DesloT();
-    while(1){
-        string id;
-        char Type;
-        cout << "Destination ID is: " << endl;
-        cin >> id;
-        cout << "Type is: " << endl;
-        cin >> Type;
-        auto TType = length_type.find(id.length());
-        if (TType == length_type.end()) {
-            cout << "id is wrong" << endl;
-            continue;
-        } else if (TType->second != Type) {
-            cout << "id or type is wrong" << endl;
-            continue;
-        }
-        char buffer[N] = {0};
-        cout << "input the message: " << endl;
-        cin >> buffer;
-        //buff_generate(buffer, )
-    }
-
+    User_input(lot, shared);
+    
     socketrecv.join();
 
     return 0;
