@@ -9,14 +9,16 @@ void Socket_Send(int & socketfd_send, loT & Slot, struct shared_buff *shared, in
         cout << "wrong socket" << endl;
         return;
     }
+
 	if (Type < 0 || Type > 2) {
 		cout << "wrong Type" << endl;
 		return;
 	}
+
 	if (Type == 0){
 		//sign up
 		char sign_up[N] = {0};
-		int n = buff_generate(sign_up, 0, NULL, 0, Slot);
+		int n = buff_generate(&sign_up[1], 0, NULL, 0, Slot);
 
 		Write(socketfd_send, sign_up, n);
 	}
