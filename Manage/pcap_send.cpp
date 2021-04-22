@@ -66,13 +66,16 @@ int get_local_mac(char *ifname){
     int s, ret;
 	struct ifreq ifr;
     char s_local_mac[6] = {0};
+
 	s = socket(AF_INET, SOCK_STREAM, 0);
 	if( s < 0 ) {
 	    perror("srv_cmd_get_local_mac : scoket() error.\n");
 	    return -1;
 	}
+
 	memset(&ifr, 0, sizeof(ifr));
 	strcpy(ifr.ifr_name, ifname);
+
 	ret = ioctl(s, SIOCGIFHWADDR, &ifr, sizeof(ifr));
 	if( ret == 0 ) {
 		memcpy(s_local_mac, ifr.ifr_hwaddr.sa_data, 6);
@@ -80,6 +83,7 @@ int get_local_mac(char *ifname){
 	}else{
 		printf(" get local mac error.\n");
 	}
+    
 	close(s);
 	return ret;
 }
