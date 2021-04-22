@@ -17,7 +17,7 @@ struct shared_buff
     bool                ready;
     int                 buff_len;
     mutex               mtx;
-    condition_variable  cv;
+    // condition_variable  cv;
 };
 
 // #ifndef LOCAL_SHARED_
@@ -25,7 +25,7 @@ struct shared_buff
 // #endif
 
 
-void Socket_Send(int & socketfd_send, loT & Slot, struct shared_buff *shared);
+void Socket_Send(int & socketfd_send, loT & Slot, struct shared_buff *shared, int Type);
 void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared);
 
 #endif

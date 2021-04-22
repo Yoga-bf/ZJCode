@@ -15,7 +15,7 @@ using namespace std;
 
 static map<int, char> length_type = {{24, '0'}, {17, '1'}, {16, '2'}};
 const char DEFAULT_TYPE = '9';
-const int  N            = 1024;
+
 
 class loT
 {
@@ -24,8 +24,9 @@ private:
     char Type;
     int ID_length;
 public:
-    int socketfd_read;
-    int socketfd_send;
+    // int socketfd_read;
+    // int socketfd_send;
+    int socketfd;
     loT();
     loT(string id);
     loT(char type);
@@ -39,21 +40,5 @@ public:
 };
 
 
-struct shared_buff
-{
-    char                buff[N];
-    bool                ready;
-    int                 buff_len;
-    mutex               mtx;
-    condition_variable  cv;
-};
-
-// #ifndef LOCAL_SHARED_
-// extern shared_buff shared;
-// #endif
-
-
-void Socket_Send(int & socketfd_send, loT & Slot, struct shared_buff *shared);
-void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared);
 
 #endif

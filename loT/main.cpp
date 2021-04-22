@@ -17,12 +17,12 @@ int main()
     lotshared.buff_len = 0;
 
     loT lot(h1_ID);
-    lot.SocketMake(SERVER_IP, PORT, lot.socketfd_send);
-    lot.SocketMake(SERVER_IP, 8001, lot.socketfd_read);
+    lot.SocketMake(SERVER_IP, PORT, lot.socketfd);
+    //lot.SocketMake(SERVER_IP, PORT, lot.socketfd);
     
-    thread socketsend(Socket_Send, std::ref(lot.socketfd_send), std::ref(lot), shared);
-    thread socketrecv(Socket_Recv, std::ref(lot.socketfd_read), std::ref(lot), shared);
-    socketsend.join();
+    //thread socketsend(Socket_Send, std::ref(lot.socketfd), std::ref(lot), shared);
+    thread socketrecv(Socket_Recv, std::ref(lot.socketfd), std::ref(lot), shared);
+    //socketsend.join();
     socketrecv.join();
 
     while(1){
