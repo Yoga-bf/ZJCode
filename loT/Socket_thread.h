@@ -3,10 +3,8 @@
 
 #include <string>
 #include <iostream>
-#include <map>
 #include <thread>
 #include <mutex>
-#include <condition_variable>
 #include "wrap.h"
 #include "loT.h"
 
@@ -29,5 +27,6 @@ void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff *shared, int 
 void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared);
 int get_length(char *buf);
 void User_input(loT & lot, struct shared_buff *shared);
+int Message_processing(char *message, int MesLen);
 
 #endif
