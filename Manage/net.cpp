@@ -33,6 +33,6 @@ int MessageProcessing(char *message, int size, char Type, char *SID, char *DID)
         cout << "wrong the type of package" << endl;
         return -1;
     }
-    
+    char DesType = message[1];
 
 }
