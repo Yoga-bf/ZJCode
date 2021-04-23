@@ -3,6 +3,9 @@
 #define _GET_PACK_CONTENT_H_
 #define _PACK_BLD_H_
 #define _PCAP_SEND_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void pcap_send(char *buf, char *dmac, char *dip, int num);
 int get_local_mac(char *ifname);
@@ -19,3 +22,6 @@ char    dstmac[6];
 char    srcmac[6];
 char    dstip[16];
 char    srcip[16];
+#ifdef __cplusplus
+}
+#endif

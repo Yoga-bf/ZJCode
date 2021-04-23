@@ -24,8 +24,11 @@ int main()
 
         size = Read(AcceptFd, buffer, N);
 
-        loTMetadata *SID, *DID;
-        int k = MessageProcessing(buffer, size, SignUp, SID, DID);
+        loTMetadata SID;
+        int k = MessageProcessing(buffer, size, SignUp, &SID);
+        if (k == -1)
+            continue;
+        
         
 
     }

@@ -1,12 +1,15 @@
 #ifndef LOT_H
 #define LOT_H
-
+#include </usr/include/c++/9/shared_mutex>
 #include <string>
-#include <ctring>
 #include <iostream>
 #include <map>
 #include <mutex>
-#include "wrap.h"
+#include <vector>
+
+extern "C" {
+    #include "net.h"
+}
 using namespace std;
 
 //const int LOT_TYPE_LENGTH[3] = {};
@@ -41,11 +44,18 @@ public:
 struct loTMetadata
 {
     /* data */
-    char *ID;
-    int length;
-
+    char    *ID;
+    int     length;
+    int     socketfd;
+    char    buff[N];
+    int     buff_len;
+    mutex   mtx;
 };
 
-
+struct loTDatabase
+{
+    vector<loTMetadata> loTDB;
+    mutable shared_timed_mutex mtx;
+};
 
 #endif
