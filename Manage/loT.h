@@ -4,9 +4,7 @@
 #include <string>
 #include <iostream>
 #include <map>
-#include <thread>
 #include <mutex>
-#include <condition_variable>
 #include "wrap.h"
 using namespace std;
 
@@ -24,8 +22,9 @@ private:
     char Type;
     int ID_length;
 public:
-    int socketfd_read;
-    int socketfd_send;
+    // int socketfd_read;
+    // int socketfd_send;
+    int socketfd;
     loT();
     loT(string id);
     loT(char type);
