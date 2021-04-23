@@ -10,7 +10,9 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <iostream>
 
+using namespace std;
 
 void SocketMake(struct sockaddr_in * ser_addr, int * server_socket_fd, int PORT, const char *Myip)
 {
@@ -23,7 +25,14 @@ void SocketMake(struct sockaddr_in * ser_addr, int * server_socket_fd, int PORT,
     Listen(*server_socket_fd, 10);
 }
 
-int MessageProcessing(char *message, int size, char Type)
+int MessageProcessing(char *message, int size, char Type, char *SID, char *DID)
 {
+    //Type is the type of package
+    char type = message[0];
+    if (type != Type) {
+        cout << "wrong the type of package" << endl;
+        return -1;
+    }
+    
 
 }
