@@ -2,6 +2,7 @@
 #define LOT_H
 
 #include <string>
+#include <ctring>
 #include <iostream>
 #include <map>
 #include <mutex>
@@ -35,6 +36,14 @@ public:
     int GetID_length() {return this->ID_length;};
     void SocketMake(const char *server_ip, int SPort, int & socketfd);
     ~loT();
+};
+
+struct loTMetadata
+{
+    /* data */
+    char *ID;
+    int length;
+
 };
 
 

@@ -1,16 +1,8 @@
+#include <cstring>
 #include "net.h"
 #include "wrap.h"
-#include <string>
-#include <iostream>
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/socket.h>
-#include <stdio.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <iostream>
+#include "loT.h"
+
 
 using namespace std;
 
@@ -25,7 +17,7 @@ void SocketMake(struct sockaddr_in * ser_addr, int * server_socket_fd, int PORT,
     Listen(*server_socket_fd, 10);
 }
 
-int MessageProcessing(char *message, int size, char Type, char *SID, char *DID)
+int MessageProcessing(char *message, int size, char Type, struct loTMetadata *SloT, struct loTMetadata *DloT)
 {
     //Type is the type of package
     char type = message[0];
@@ -33,6 +25,37 @@ int MessageProcessing(char *message, int size, char Type, char *SID, char *DID)
         cout << "wrong the type of package" << endl;
         return -1;
     }
-    char DesType = message[1];
 
+    if (type == Com) {
+        char DesType = message[1];
+        auto typelength = TypeLength.find(DesType);
+        if (typelength == TypeLength.end()) {
+            cout << "wrong DID" << endl;
+            return -1;
+        }
+        DloT->length = typelength->second;
+        memcpy(DloT->ID, &message[2], DloT->length);
+
+
+        char SouType = message[2+DloT->length];
+        typelength = TypeLength.find(SouType);
+        if (typelength == TypeLength.end()) {
+            cout << "wrong SID" << endl;
+            return -1;
+        }
+        SloT->length = typelength->second;
+        memcpy(SloT->ID, &message[3+DloT->length], SloT->length);
+        return 0;
+    }
+
+    if (type == SignUp) {
+        char SouType = message[1];
+        auto typelength = TypeLength.find(SouType);
+        if (typelength == TypeLength.end()) {
+            cout << "wrong SID" << endl;
+            return -1;
+        }
+        SloT->length = typelength->second;
+        memcpy(SloT->ID, &message[2], SloT->length );
+    }
 }
