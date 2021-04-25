@@ -45,7 +45,7 @@ struct loTMetadata
 {
     /* data */
     char    *ID;
-    int     length;
+    int     length;     //the length of ID
     int     socketfd;
     char    buff[N];
     int     buff_len;
