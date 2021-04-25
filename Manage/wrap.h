@@ -1,14 +1,7 @@
 #ifndef WRAP_H_
 #define WRAP_H_
 
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/socket.h>
-#include <stdio.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <fcntl.h>
+
 
 void perr_exit(const char *s);
 int Accept(int fd, struct sockaddr *sa, socklen_t *salenptr);

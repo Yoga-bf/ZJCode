@@ -1,4 +1,8 @@
 #include <cstring>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include "net.h"
 #include "wrap.h"
 #include "loT.h"
@@ -58,4 +62,9 @@ int MessageProcessing(char *message, int size, char Type, struct loTMetadata *Sl
         SloT->length = typelength->second;
         memcpy(SloT->ID, &message[2], SloT->length );
     }
+}
+
+int SendMessage(loTMetadata* DloT)
+{
+    //Send the message to the loT which is belong of the manage.
 }

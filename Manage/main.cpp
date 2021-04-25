@@ -4,6 +4,7 @@
 #include "pcap_send.h"
 #include "wrap.h"
 #include "net.h"
+#include <netinet/in.h>
 
 const int  PORT = 8000;
 const char Myip[] = "127.0.0.1";
@@ -17,23 +18,6 @@ int main()
     SocketMake(&ser_addr, &server_socket_fd, PORT, Myip);
 
     
-    int AcceptFd;
-    while (1) {
-        AcceptFd = Accept(server_socket_fd, NULL, NULL);
-
-        char buffer[N] = {0};
-        int size;
-
-        size = Read(AcceptFd, buffer, N);
-
-        loTMetadata SID;
-        int k = MessageProcessing(buffer, size, SignUp, &SID);
-        if (k == -1)
-            continue;
-        AllloT.mtx.lock();
-        AllloT.loTDB.push_back(SID);
-        AllloT.mtx.unlock();
-
-    }
+    
     return 0;
 }

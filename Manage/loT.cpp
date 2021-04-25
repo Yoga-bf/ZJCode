@@ -2,6 +2,10 @@
 #include "buff_processing.h"
 #include "wrap.h"
 #include <cstring>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 loT::loT()
 {
