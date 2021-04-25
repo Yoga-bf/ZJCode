@@ -7,6 +7,7 @@
 
 const int  PORT = 8000;
 const char Myip[] = "127.0.0.1";
+loTDatabase AllloT;
 
 int main()
 {
@@ -15,6 +16,7 @@ int main()
 
     SocketMake(&ser_addr, &server_socket_fd, PORT, Myip);
 
+    
     int AcceptFd;
     while (1) {
         AcceptFd = Accept(server_socket_fd, NULL, NULL);
@@ -28,8 +30,9 @@ int main()
         int k = MessageProcessing(buffer, size, SignUp, &SID);
         if (k == -1)
             continue;
-        
-        
+        AllloT.mtx.lock();
+        AllloT.loTDB.push_back(SID);
+        AllloT.mtx.unlock();
 
     }
     return 0;

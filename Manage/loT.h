@@ -55,6 +55,7 @@ struct loTMetadata
 struct loTDatabase
 {
     vector<loTMetadata> loTDB;
+    map<string, int> loTFdDB;
     mutable shared_mutex mtx;
 };
 
