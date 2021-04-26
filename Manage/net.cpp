@@ -54,6 +54,7 @@ int MessageProcessing(char *message, int size, char Type, struct loTMetadata *Sl
 
     if (type == SignUp) {
         char SouType = message[1];
+        SloT->type = SouType;
         auto typelength = TypeLength.find(SouType);
         if (typelength == TypeLength.end()) {
             cout << "wrong SID" << endl;
@@ -62,9 +63,4 @@ int MessageProcessing(char *message, int size, char Type, struct loTMetadata *Sl
         SloT->length = typelength->second;
         memcpy(SloT->ID, &message[2], SloT->length );
     }
-}
-
-int SendMessage(loTMetadata* DloT)
-{
-    //Send the message to the loT which is belong of the manage.
 }

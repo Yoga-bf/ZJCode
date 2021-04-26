@@ -42,7 +42,15 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
 
         if (size == 0) {
             cout << myloT->ID << " has been sign down" << endl;
-            //the package of sign down
+
+            //send the sign down package
+            memset(buffer, 0, N*sizeof(char));
+            buffer[0] = SignDown;
+            buffer[1] = myloT->type;
+            memcpy(&buffer[2], myloT->ID, myloT->length);
+            pcap_send(buffer, NULL, DST_IP, 1, (2+myloT->length));
+
+            //delete the data of lot
             AllloT->mtx.lock();
             for (auto it = AllloT->loTDB.begin(); it != AllloT->loTDB.end(); it++) {
                 if (it->ID == myloT->ID) {
@@ -61,9 +69,8 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
             }
             myloT->buff_len = size;
             memcpy(myloT->buff, buffer, N);
-            //how to deal with this package
-            //may be the des is not belong the manage, otherwise.
-            //may be i need a function to send the message to the lot of the manage.
+
+            //whether the des lot is belonging of manage
             int desfd;
             AllloT->mtx.lock_shared();
             for (auto it = AllloT->loTDB.begin(); it != AllloT->loTDB.end(); it++) {
@@ -74,6 +81,7 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
                 }
             }
             AllloT->mtx.unlock_shared();
+            
             if (k == -1) {
                 //the lot is belong manage
                 size = Write(desfd, buffer, size);
