@@ -80,6 +80,7 @@ void* Com_with_loT(loTMetadata* myloT)
         } else {
             loTMetadata slot;
             loTMetadata dlot;
+            //something wrong with this function
             int k = MessageProcessing(buffer, size, Com, &slot, &dlot);
             if (k == -1 || slot.ID != myloT->ID) {
                 cout << "the packet which loT send is wrong" << endl;
