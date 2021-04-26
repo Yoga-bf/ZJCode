@@ -6,7 +6,7 @@
 #include "buff_processing.h"
 
 const char SERVER_IP[] = "127.0.0.1";
-const int  PORT        = 8000;
+const int  PORT        = 8080;
 
 int main()
 {

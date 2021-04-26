@@ -7,9 +7,8 @@
 #include <mutex>
 #include <vector>
 
-extern "C" {
-    #include "net.h"
-}
+#include "mynet.h"
+
 using namespace std;
 
 //const int LOT_TYPE_LENGTH[3] = {};
@@ -50,14 +49,13 @@ struct loTMetadata
     int     socketfd;
     char    buff[N];
     int     buff_len;
-    mutex   mtx;
 };
 
 struct loTDatabase
 {
     vector<loTMetadata> loTDB;
-    map<string, int> loTFdDB;
     mutable shared_mutex mtx;
 };
 
+extern loTDatabase AllloT;
 #endif

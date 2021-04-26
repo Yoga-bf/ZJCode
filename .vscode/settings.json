@@ -54,6 +54,10 @@
         "iterator": "cpp",
         "memory_resource": "cpp",
         "netfwd": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "ranges": "cpp",
+        "stop_token": "cpp"
     }
 }

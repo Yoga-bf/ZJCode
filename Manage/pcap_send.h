@@ -1,3 +1,5 @@
+#ifndef PCAP_SEND_
+#define PCAP_SEND_
 #define _PCAP_SEND_H_
 #define _SEND_UDP_H_
 #define _GET_PACK_CONTENT_H_
@@ -18,8 +20,10 @@ int pcap_receive();
 #define DEFAULT_MAC "111111"
 #define DEFAULT_IP "10.0.0.1"
 
-#define DST_IP "6.6.6.6"
-#define SRC_IP "192.168.4.167"
+//#define DST_IP "6.6.6.6"
+//#define SRC_IP "192.168.4.167"
+extern char DST_IP[];
+extern char SRC_IP[];
 
 #define COMPILE_IP "dst host 192.168.4.167"
 #define COMPILE_PORT "dst port 80"
@@ -27,4 +31,5 @@ int pcap_receive();
 
 #ifdef __cplusplus
 }
+#endif
 #endif

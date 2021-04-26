@@ -19,11 +19,15 @@
 int port = 8000;
 int pack_len = 100;
 static char errbuf[PCAP_ERRBUF_SIZE];
-char    dstmac[6]={248,15,65,246,104,77};
-char    srcmac[6]={248,15,65,246,104,78};
+unsigned char    dstmac[6]={248,15,65,246,104,77};
+unsigned char    srcmac[6]={248,15,65,246,104,78};
 char    dstip[16];
 char    srcip[16];
 int pack_real_len = 0;
+
+char DST_IP[] = "6.6.6.6";
+char SRC_IP[] = "192.168.4.167";
+
 
 void pcap_callback(unsigned char * arg, const struct pcap_pkthdr *packet_header, const unsigned char *packet_content);
 
@@ -49,7 +53,7 @@ void pcap_send(char *buff, char *dmac, char *dip, int num, int buff_len){
     
     if (dmac == NULL) {
     } else {
-        strcpy(dstmac, dmac);
+        strcpy((char*)dstmac, dmac);
     }
 
     if (dip == NULL) {
@@ -180,6 +184,7 @@ int pcap_receive()
         printf("error in receive packet\n");
         }
     }
+    return 1;
     
 }
 

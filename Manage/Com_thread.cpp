@@ -1,17 +1,18 @@
+#include <thread>
 #include <iostream>
 #include <cstring>
 #include <list>
-#include <thread>
+
 #include "loT.h"
 #include "wrap.h"
 #include "Com_thread.h"
 #include "pcap_send.h"
+#include "mynet.h"
 
 using namespace std;
 int threadnum = 0;
-mutex threadmux;
 
-void* Recv_loT_Signup(int server_socket_fd, loTDatabase* AllloT)
+void* Recv_loT_Signup(int server_socket_fd)
 {
     //Process the data sent by the loT
     int AcceptFd;
@@ -30,15 +31,16 @@ void* Recv_loT_Signup(int server_socket_fd, loTDatabase* AllloT)
             continue;
         loTs[threadnum].socketfd = AcceptFd;
         //loTs.push_back(SID);
-        AllloT->mtx.lock();
-        AllloT->loTDB.push_back(loTs[threadnum]);
-        AllloT->mtx.unlock();
+        AllloT.mtx.lock();
+        AllloT.loTDB.push_back(loTs[threadnum]);
+        AllloT.mtx.unlock();
         threadnum++;
-        thread ComWithloT(Com_with_loT, &loTs[threadnum], &AllloT);
+        thread ComWithloT(Com_with_loT, &loTs[threadnum]);
     }
+    
 }
 
-void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
+void* Com_with_loT(loTMetadata* myloT)
 {
     //Communication with IoT 
     int size;
@@ -58,15 +60,15 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
             pcap_send(buffer, NULL, DST_IP, 1, (2+myloT->length));
 
             //delete the data of lot
-            AllloT->mtx.lock();
-            for (auto it = AllloT->loTDB.begin(); it != AllloT->loTDB.end(); it++) {
+            AllloT.mtx.lock();
+            for (auto it = AllloT.loTDB.begin(); it != AllloT.loTDB.end(); it++) {
                 if (it->ID == myloT->ID) {
-                    it = AllloT->loTDB.erase(it);
+                    it = AllloT.loTDB.erase(it);
                     break;
                 }
             }
-            AllloT->mtx.unlock();
-            
+            AllloT.mtx.unlock();
+
         } else {
             loTMetadata slot;
             loTMetadata dlot;
@@ -80,15 +82,15 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
 
             //whether the des lot is belonging of manage
             int desfd;
-            AllloT->mtx.lock_shared();
-            for (auto it = AllloT->loTDB.begin(); it != AllloT->loTDB.end(); it++) {
+            AllloT.mtx.lock_shared();
+            for (auto it = AllloT.loTDB.begin(); it != AllloT.loTDB.end(); it++) {
                 if (it->ID == dlot.ID) {
                     k = -1;
                     desfd = it->socketfd;
                     break;
                 }
             }
-            AllloT->mtx.unlock_shared();
+            AllloT.mtx.unlock_shared();
 
             if (k == -1) {
                 //the lot is belong manage
@@ -99,10 +101,12 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
             }
         }
     }
+    
 }
 
 void* Pcap_Receive()
 {
     //Process the data sent by the switch
-    pcap_receive();
+    int k = pcap_receive();
+    
 }
