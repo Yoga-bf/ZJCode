@@ -16,6 +16,7 @@ using namespace std;
 
 static map<int, char> length_type = {{24, '0'}, {17, '1'}, {16, '2'}};
 const char DEFAULT_TYPE = '9';
+const static int MAXIDLength = 30;
 
 
 class loT
@@ -43,9 +44,9 @@ public:
 struct loTMetadata
 {
     /* data */
-    char    *ID;
+    char    ID[MAXIDLength];
     char    type;
-    int     length;     //the length of ID
+    unsigned int     length;     //the length of ID
     int     socketfd;
     char    buff[N];
     int     buff_len;

@@ -19,16 +19,19 @@ void* Recv_loT_Signup(int server_socket_fd)
     //list<loTMetadata> loTs;
     loTMetadata loTs[100];
     while (1) {
+        cout << "wait for connect " << endl;
         AcceptFd = Accept(server_socket_fd, NULL, NULL);
 
         char buffer[N] = {0};
         int size;
 
         size = Read(AcceptFd, buffer, N);
+        
 
         int k = MessageProcessing(buffer, size, SignUp, &loTs[threadnum]);
         if (k == -1)
             continue;
+
         loTs[threadnum].socketfd = AcceptFd;
         //loTs.push_back(SID);
         AllloT.mtx.lock();
@@ -36,6 +39,7 @@ void* Recv_loT_Signup(int server_socket_fd)
         AllloT.mtx.unlock();
         threadnum++;
         thread ComWithloT(Com_with_loT, &loTs[threadnum]);
+        ComWithloT.detach();
     }
     
 }
@@ -45,11 +49,12 @@ void* Com_with_loT(loTMetadata* myloT)
     //Communication with IoT 
     int size;
     char buffer[N] = {0};
+    cout << "Com with loT " << myloT->ID << endl;
     while(1) {
         memset(buffer, 0, N*sizeof(char));
         size = Read(myloT->socketfd, buffer, N);
-
-        if (size == 0) {
+        cout << "lot send something" << endl;
+        if (size <= 0) {
             cout << myloT->ID << " has been sign down" << endl;
 
             //send the sign down package
@@ -79,7 +84,7 @@ void* Com_with_loT(loTMetadata* myloT)
             }
             myloT->buff_len = size;
             memcpy(myloT->buff, buffer, N);
-
+            cout << myloT->ID << " send " << buffer << endl;
             //whether the des lot is belonging of manage
             int desfd;
             AllloT.mtx.lock_shared();

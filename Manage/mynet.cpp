@@ -24,6 +24,7 @@ void SocketMake(struct sockaddr_in * ser_addr, int * server_socket_fd, int PORT,
 int MessageProcessing(char *message, int size, char Type, struct loTMetadata *SloT, struct loTMetadata *DloT)
 {
     //Type is the type of package
+    cout << "lot send " << message << endl;
     char type = message[0];
     if (type != Type) {
         cout << "wrong the type of package" << endl;
@@ -34,7 +35,7 @@ int MessageProcessing(char *message, int size, char Type, struct loTMetadata *Sl
         char DesType = message[1];
         auto typelength = TypeLength.find(DesType);
         if (typelength == TypeLength.end()) {
-            cout << "wrong DID" << endl;
+            cout << "Com: wrong DID" << endl;
             return -1;
         }
         DloT->length = typelength->second;
@@ -44,7 +45,7 @@ int MessageProcessing(char *message, int size, char Type, struct loTMetadata *Sl
         char SouType = message[2+DloT->length];
         typelength = TypeLength.find(SouType);
         if (typelength == TypeLength.end()) {
-            cout << "wrong SID" << endl;
+            cout << "Com: wrong SID" << endl;
             return -1;
         }
         SloT->length = typelength->second;
@@ -54,14 +55,16 @@ int MessageProcessing(char *message, int size, char Type, struct loTMetadata *Sl
 
     if (type == SignUp) {
         char SouType = message[1];
+        memset(SloT->ID, 0, sizeof(char)*MAXIDLength);
         SloT->type = SouType;
         auto typelength = TypeLength.find(SouType);
         if (typelength == TypeLength.end()) {
-            cout << "wrong SID" << endl;
+            cout << "sign up: wrong SID" << endl;
             return -1;
         }
         SloT->length = typelength->second;
-        memcpy(SloT->ID, &message[2], SloT->length );
+        cout << SloT->length << endl;
+        memcpy(SloT->ID, &message[2], (size_t)SloT->length);
     }
     return 1;
 }
