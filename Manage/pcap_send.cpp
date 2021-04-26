@@ -17,8 +17,15 @@
 #include "pcap_send.h"
 
 int port = 8000;
-int pack_len = 20;
+int pack_len = 100;
 static char errbuf[PCAP_ERRBUF_SIZE];
+char    dstmac[6]={248,15,65,246,104,77};
+char    srcmac[6]={248,15,65,246,104,78};
+char    dstip[16];
+char    srcip[16];
+int pack_real_len = 0;
+
+void pcap_callback(unsigned char * arg, const struct pcap_pkthdr *packet_header, const unsigned char *packet_content);
 
 static void net_dev_close(pcap_t *dev)
 {
@@ -28,70 +35,36 @@ static void net_dev_close(pcap_t *dev)
 	}
 }
 
-void pcap_send(char *buff, char *dmac, char *dip, int num){
+void pcap_send(char *buff, char *dmac, char *dip, int num, int buff_len){
     char dev_name[10] = {0};
     int len;
     int ret;
     int i,j;
+    char buf[MAX];
     
     sprintf(dev_name, DEV_NAME);
-    if((ret = get_local_mac(dev_name)) == -1){
-        perror("get_local_mac fail...") ;
-        printf("can't grt mac\n");
-        return;
-    }
-    memset(dstmac, 0, sizeof(dstmac));
     memset(dstip, 0, sizeof(dstip));
+    memset(srcip, 0, sizeof(srcip));
+    strcat(srcip, SRC_IP);
     
-    if(dmac == NULL){
-        strcpy(dstmac, DEFAULT_MAC);
-    }
-    else{
+    if (dmac == NULL) {
+    } else {
         strcpy(dstmac, dmac);
     }
 
-    if(dip == NULL){
-        strcpy(dstip, DEFAULT_IP);
-    }
-    else{
+    if (dip == NULL) {
+        strcpy(dstip, DST_IP);
+    } else {
         strcpy(dstip, dip);
     }
 
-    pcap_snd_udp_pack(buff, dev_name, num);
+    pcap_snd_udp_pack(buf, buff, dev_name, num, buff_len);
 
 }
 
-
-int get_local_mac(char *ifname){
-    int s, ret;
-	struct ifreq ifr;
-    char s_local_mac[6] = {0};
-
-	s = socket(AF_INET, SOCK_STREAM, 0);
-	if( s < 0 ) {
-	    perror("srv_cmd_get_local_mac : scoket() error.\n");
-	    return -1;
-	}
-
-	memset(&ifr, 0, sizeof(ifr));
-	strcpy(ifr.ifr_name, ifname);
-
-	ret = ioctl(s, SIOCGIFHWADDR, &ifr, sizeof(ifr));
-	if( ret == 0 ) {
-		memcpy(s_local_mac, ifr.ifr_hwaddr.sa_data, 6);
-        printf( "get local mac(%c:%c:%c:%c:%c:%c)\n",s_local_mac[0],s_local_mac[1],s_local_mac[2],s_local_mac[3],s_local_mac[4],s_local_mac[5]);
-	}else{
-		printf(" get local mac error.\n");
-	}
-    
-	close(s);
-	return ret;
-}
-
-int pcap_snd_udp_pack(char *udp_pack, char *dev_name ,int num){
+int pcap_snd_udp_pack(char *udp_pack, char *UDP_PACK, char *dev_name ,int num, int lot_len){
     int ret;
-    ret = bld_udp_pack(udp_pack);
-    printf("pcap_snd_udp_pack()...bld_udp_pack complete.\n");
+    ret = bld_udp_pack(udp_pack, UDP_PACK, lot_len);
     if((ret = pcap_snd_pack(udp_pack, dev_name , num)) == -1){
         perror("pcap_snd_udp_pack()...pcap_snd_pack fail.\n");
         return -1;
@@ -99,7 +72,7 @@ int pcap_snd_udp_pack(char *udp_pack, char *dev_name ,int num){
     return 0;
 }
 
-int bld_udp_pack(char *pack){
+int bld_udp_pack(char *pack, char *UDP_PACK, int lot_len){
     struct ethhdr *peth;
     struct iphdr *pip;
     struct udphdr *udp;
@@ -129,8 +102,8 @@ int bld_udp_pack(char *pack){
     pip->frag_off = 0;
     pip->ttl = 64;
     pip->protocol = IPPROTO_UDP;          //ip->protocol = IPPROTO_UDP
-    pip->saddr = inet_addr(dstip);
-    pip->daddr = inet_addr("127.0.0.1");
+    pip->saddr = inet_addr(srcip);
+    pip->daddr = inet_addr(dstip);
     pip->check = 0;
     
     udp->source= htons(port);
@@ -138,21 +111,19 @@ int bld_udp_pack(char *pack){
     udp->check = 0;
     udp->len   = sizeof(struct udphdr);
     
-    printf("Input UDP content:\n") ;
-    scanf("%s" , buf) ;
-    for(i = 0 ; (i < pack_len) && (i < strlen(buf)) ; i++){
-        pack[hdr_size+i] = buf[i] ;
+    for(i = 0 ; (i < pack_len) && (i < lot_len) ; i++){
+        pack[hdr_size+i] = UDP_PACK[i];
     }
     
-    return hdr_size+strlen(buf) ;
+    pack_real_len = lot_len + hdr_size;
+
+    return hdr_size+strlen(UDP_PACK);
 }
 
 int pcap_snd_pack(char *pkt, char *dev_name , int num){
     
     int i ;
     pcap_t *fp = NULL ;
-
-    printf("dev_name = : %s", dev_name);
     
     fp=pcap_open_live(dev_name, 8000, 1, 500, errbuf);
     if(fp == NULL){
@@ -162,11 +133,87 @@ int pcap_snd_pack(char *pkt, char *dev_name , int num){
 
     for(i = 0 ; i < num ; i++){
         printf("begin to pcap_sendpacket----");
-        pcap_sendpacket(fp, (const u_char *)pkt, sizeof(pkt));
+        pcap_sendpacket(fp, (const u_char *)pkt, pack_real_len);
         printf("success\n") ;
         sleep(1) ;
     }
     net_dev_close(fp) ;
     
     return 0 ;
+}
+
+
+int pcap_receive()
+{
+
+    char *dev,errbuf[1024];
+    dev = (char*)malloc(8);
+    char compile[30];
+    memset(dev,0,sizeof(dev));
+    strcpy(dev,DEV_NAME);
+
+    if(dev==NULL){
+        printf("device is null\n");
+        return 0;
+    }
+
+    pcap_t *pcap_handle=pcap_open_live(dev,65535,1,0,errbuf);
+    if(pcap_handle==NULL){
+        printf("%s\n",errbuf);
+        return 0;
+    }
+
+    memset(compile,0,sizeof(compile));
+    strcpy(compile,COMPILE_PORT);
+    struct bpf_program filter;
+    if(pcap_compile(pcap_handle,&filter,compile,1,0)<0){
+        printf("error\n");
+        return 0;
+    }
+    if(pcap_setfilter(pcap_handle,&filter)<0){
+        printf("error\n");
+        return 0;
+    }
+
+    while(1){
+        if(pcap_loop(pcap_handle,-1,pcap_callback,NULL)<0){
+        printf("error in receive packet\n");
+        }
+    }
+    
+}
+
+void pcap_callback(unsigned char * arg, const struct pcap_pkthdr *packet_header, const unsigned char *packet_content)
+{
+
+    printf("Packet length : %d\n", packet_header->len);
+    printf("Number of bytes : %d\n", packet_header->caplen);
+
+    int i;
+    for(i = 0; i < packet_header->caplen; i++){
+        printf(" %02x",packet_content[i]);
+        if((i+1)%16==0){
+            printf("\n");
+        }
+    }
+
+    struct ethhdr *peth;
+    struct iphdr *pip;
+    struct udphdr *udp;
+    char *lot_information;
+    
+    u_int eth_len = sizeof(struct ethhdr);
+    u_int ip_len = sizeof(struct iphdr);
+    u_int udp_len = sizeof(struct udphdr);
+    u_int all_len = eth_len + ip_len + udp_len;
+
+    peth = (struct ethhdr *)packet_content;
+    pip = (struct iphdr *)(packet_content + eth_len);
+    udp = (struct udphdr *)(packet_content + eth_len + ip_len);
+    lot_information = (char *)(packet_content + all_len);
+
+    if( lot_information[0] == '0' || lot_information[0] == '1' || lot_information[0] == '2' ){
+        printf("success receive!\n");
+    }
+
 }

@@ -7,16 +7,22 @@
 extern "C" {
 #endif
 
-void pcap_send(char *buf, char *dmac, char *dip, int num);
-int get_local_mac(char *ifname);
-int pcap_snd_udp_pack(char *udp_pack, char *dev_name, int num);
-int bld_udp_pack(char *pack);
+void pcap_send(char *buf, char *dmac, char *dip, int num, int buff_len);
+int pcap_snd_udp_pack(char *udp_pack, char *UDP_PACK, char *dev_name ,int num, int lot_len);
+int bld_udp_pack(char *pack, char *UDP_PACK, int lot_len);
 int pcap_snd_pack(char *pkt, char *dev_name , int num);
+int pcap_receive();
 
 #define MAX 1024
 #define DEV_NAME "eth2"
 #define DEFAULT_MAC "111111"
 #define DEFAULT_IP "10.0.0.1"
+
+#define DST_IP "6.6.6.6"
+#define SRC_IP "192.168.4.167"
+
+#define COMPILE_IP "dst host 192.168.4.167"
+#define COMPILE_PORT "dst port 80"
 
 char    dstmac[6];
 char    srcmac[6];
