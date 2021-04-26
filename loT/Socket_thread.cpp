@@ -21,7 +21,7 @@ void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff *shared, int 
 		sign_up[0] = SignUp;
 		int n = buff_generate(&sign_up[1], SignM, NULL, 0, Slot);
 		cout << sign_up << endl;
-		Write(socketfd_send, sign_up, n);
+		Write(socketfd_send, sign_up, n+1);
 		return;
 	}
 	

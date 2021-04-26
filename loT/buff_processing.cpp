@@ -16,7 +16,7 @@ int buff_generate(char * buff, int Type, char * message, int n, loT & SloT, loT 
         SID = SloT.GetID();
         SID_length = SloT.GetID_length();
 
-        SID.copy(buff, SID_length, 1);
+        SID.copy(&buff[1], SID_length, 0);
         buff[SID_length + 1] = '\0';
         cout << "ge buff is " << endl;
 
@@ -33,7 +33,7 @@ int buff_generate(char * buff, int Type, char * message, int n, loT & SloT, loT 
         DID = DloT.GetID();
         DID_length = DloT.GetID_length();
 
-        DID.copy(buff, DID_length, 1);
+        DID.copy(buff, DID_length, 0);
         buff[DID_length + 1] = SloT.GetType();
         SID.copy(buff, SID_length, 2 + DID_length);
 

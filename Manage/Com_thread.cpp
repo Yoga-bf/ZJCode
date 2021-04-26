@@ -37,10 +37,11 @@ void* Recv_loT_Signup(int server_socket_fd)
         AllloT.mtx.lock();
         AllloT.loTDB.push_back(loTs[threadnum]);
         AllloT.mtx.unlock();
-        threadnum++;
         thread ComWithloT(Com_with_loT, &loTs[threadnum]);
+        threadnum++;
         ComWithloT.detach();
     }
+
     
 }
 
@@ -50,8 +51,10 @@ void* Com_with_loT(loTMetadata* myloT)
     int size;
     char buffer[N] = {0};
     cout << "Com with loT " << myloT->ID << endl;
+    
     while(1) {
         memset(buffer, 0, N*sizeof(char));
+        
         size = Read(myloT->socketfd, buffer, N);
         cout << "lot send something" << endl;
         if (size <= 0) {

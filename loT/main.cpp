@@ -19,7 +19,7 @@ int main()
     loT lot(h1_ID);
     lot.SocketMake(SERVER_IP, PORT, lot.socketfd);
     
-    //Socket_Send(lot.socketfd, lot, shared, SignM);  //Sign up
+    Socket_Send(lot.socketfd, lot, shared, SignM);  //Sign up
 
     thread socketrecv(Socket_Recv, std::ref(lot.socketfd), std::ref(lot), shared);
     
