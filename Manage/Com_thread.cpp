@@ -1,16 +1,22 @@
 #include <iostream>
 #include <cstring>
+#include <list>
+#include <thread>
 #include "loT.h"
 #include "wrap.h"
 #include "Com_thread.h"
 #include "pcap_send.h"
 
 using namespace std;
+int threadnum = 0;
+mutex threadmux;
 
 void* Recv_loT_Signup(int server_socket_fd, loTDatabase* AllloT)
 {
     //Process the data sent by the loT
     int AcceptFd;
+    //list<loTMetadata> loTs;
+    loTMetadata loTs[100];
     while (1) {
         AcceptFd = Accept(server_socket_fd, NULL, NULL);
 
@@ -19,15 +25,16 @@ void* Recv_loT_Signup(int server_socket_fd, loTDatabase* AllloT)
 
         size = Read(AcceptFd, buffer, N);
 
-        loTMetadata SID;
-        int k = MessageProcessing(buffer, size, SignUp, &SID);
+        int k = MessageProcessing(buffer, size, SignUp, &loTs[threadnum]);
         if (k == -1)
             continue;
-        SID.socketfd = AcceptFd;
+        loTs[threadnum].socketfd = AcceptFd;
+        //loTs.push_back(SID);
         AllloT->mtx.lock();
-        AllloT->loTDB.push_back(SID);
+        AllloT->loTDB.push_back(loTs[threadnum]);
         AllloT->mtx.unlock();
-
+        threadnum++;
+        thread ComWithloT(Com_with_loT, &loTs[threadnum], &AllloT);
     }
 }
 
@@ -59,6 +66,7 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
                 }
             }
             AllloT->mtx.unlock();
+            
         } else {
             loTMetadata slot;
             loTMetadata dlot;
@@ -81,7 +89,7 @@ void* Com_with_loT(loTMetadata* myloT, loTDatabase* AllloT)
                 }
             }
             AllloT->mtx.unlock_shared();
-            
+
             if (k == -1) {
                 //the lot is belong manage
                 size = Write(desfd, buffer, size);

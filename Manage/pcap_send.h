@@ -14,7 +14,7 @@ int pcap_snd_pack(char *pkt, char *dev_name , int num);
 int pcap_receive();
 
 #define MAX 1024
-#define DEV_NAME "eth2"
+#define DEV_NAME "ens33"
 #define DEFAULT_MAC "111111"
 #define DEFAULT_IP "10.0.0.1"
 
@@ -24,10 +24,7 @@ int pcap_receive();
 #define COMPILE_IP "dst host 192.168.4.167"
 #define COMPILE_PORT "dst port 80"
 
-char    dstmac[6];
-char    srcmac[6];
-char    dstip[16];
-char    srcip[16];
+
 #ifdef __cplusplus
 }
 #endif
