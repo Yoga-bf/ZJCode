@@ -112,7 +112,7 @@ int bld_udp_pack(char *pack){
     peth = (struct ethhdr *)pack;
     pip = (struct iphdr *)(pack + sizeof(struct ethhdr));
     udp = (struct udphdr *)(pack + sizeof(struct ethhdr) + sizeof(struct iphdr));
-    hdr_size = sizeof(struct ethhdr) + sizeof(struct iphdr) + sizeof(struct iphdr) + sizeof(struct udphdr);
+    hdr_size = sizeof(struct ethhdr) + sizeof(struct iphdr) + sizeof(struct udphdr);
     printf("the long of the udp is %d\n", hdr_size);
     
     for(i = 0 ; i < 6 ; i++)
