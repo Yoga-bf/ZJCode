@@ -14,7 +14,10 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <iostream>
 #include "pcap_send.h"
+#include "loT.h"
+#include "wrap.h"
 
 int port = 8000;
 int pack_len = 100;
@@ -217,8 +220,34 @@ void pcap_callback(unsigned char * arg, const struct pcap_pkthdr *packet_header,
     udp = (struct udphdr *)(packet_content + eth_len + ip_len);
     lot_information = (char *)(packet_content + all_len);
 
-    if( lot_information[0] == '0' || lot_information[0] == '1' || lot_information[0] == '2' ){
-        printf("success receive!\n");
+    // if( lot_information[0] == '0' || lot_information[0] == '1' || lot_information[0] == '2' ){
+    //     printf("success receive!\n");
+    // }
+    if (lot_information[0] == '2') {
+        cout << "receive the packet from switch" << endl;
+        loTMetadata slot;
+        loTMetadata dlot;
+        //something wrong with this function
+        int size = 0;
+        while(lot_information[size++] != 0){
+        }
+        size -= 1;
+        int k = MessageProcessing(lot_information, size, Com, &slot, &dlot);
+        int desfd;
+        AllloT.mtx.lock_shared();
+        for (auto it = AllloT.loTDB.begin(); it != AllloT.loTDB.end(); it++) {
+            if (it->ID == dlot.ID) {
+                k = -1;
+                desfd = it->socketfd;
+                break;
+            }
+        }
+        AllloT.mtx.unlock_shared();
+        if (k == -1) {
+            //the lot is belong manage
+            size = Write(desfd, lot_information, size);
+        } else {
+            cout << "there is no lot belong mine, the packet of switch is wrong" << endl;
+        }
     }
-
 }
