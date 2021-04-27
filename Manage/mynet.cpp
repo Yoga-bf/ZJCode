@@ -32,6 +32,8 @@ int MessageProcessing(char *message, int size, char Type, struct loTMetadata *Sl
     }
 
     if (type == Com) {
+        memset(SloT->ID, 0, sizeof(char)*MAXIDLength);
+        memset(DloT->ID, 0, sizeof(char)*MAXIDLength);
         char DesType = message[1];
         auto typelength = TypeLength.find(DesType);
         if (typelength == TypeLength.end()) {
