@@ -55,6 +55,13 @@ void* Com_with_loT(loTMetadata* myloT)
     while(1) {
         memset(buffer, 0, N*sizeof(char));
         
+        //sign in
+        buffer[0] = '0';
+        buffer[1] = myloT->type;
+        memcpy(&buffer[2], myloT->ID, myloT->length);
+        size = myloT->length + 2;
+        pcap_send(buffer, NULL, DST_IP, 1, size);
+
         size = Read(myloT->socketfd, buffer, N);
         cout << "lot send something" << endl;
         if (size <= 0) {
@@ -82,7 +89,7 @@ void* Com_with_loT(loTMetadata* myloT)
             loTMetadata dlot;
             //something wrong with this function
             int k = MessageProcessing(buffer, size, Com, &slot, &dlot);
-            if (k == -1 || slot.ID != myloT->ID) {
+            if (k == -1 || strcmp(slot.ID, myloT->ID) != 0) {
                 cout << "the packet which loT send is wrong" << endl;
                 continue;
             }
