@@ -18,7 +18,7 @@ int buff_generate(char * buff, int Type, char * message, int n, loT & SloT, loT 
 
         SID.copy(&buff[1], SID_length, 0);
         buff[SID_length + 1] = '\0';
-        cout << "ge buff is " << endl;
+        cout << "generate buff is " << endl;
 
         return SID_length + 1;
     }
@@ -61,7 +61,7 @@ int buff_generate(char * buff, int Type, char * message, int n, loT & SloT, stri
 
         SID.copy(&buff[1], SID_length, 0);
         buff[SID_length + 1] = '\0';
-        cout << "ge buff is " << endl;
+        cout << "generate buff is " << endl;
 
         return SID_length + 1;
     }

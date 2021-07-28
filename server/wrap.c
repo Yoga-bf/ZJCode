@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <errno.h>
 #include "wrap.h"
 
 void perr_exit(const char *s)

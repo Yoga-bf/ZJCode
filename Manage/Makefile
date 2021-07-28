@@ -1,4 +1,4 @@
-cc   = g++
+cc   = /usr/bin/g++-9
 prom = manage
 deps = $(shell find ./ -name "*.h")
 src  = $(shell  find ./ -name "*.cpp")

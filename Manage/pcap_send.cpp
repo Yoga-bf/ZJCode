@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
+#include <ctime>
 #include <netinet/in.h>
 #include <net/ethernet.h>
 #include <pcap/pcap.h>
@@ -28,8 +29,8 @@ char    dstip[16];
 char    srcip[16];
 int pack_real_len = 0;
 
-char DST_IP[] = "6.6.6.6";
-char SRC_IP[] = "192.168.4.167";
+char DST_IP[] = "10.0.0.5";
+char SRC_IP[] = "10.0.0.1";
 
 
 void pcap_callback(unsigned char * arg, const struct pcap_pkthdr *packet_header, const unsigned char *packet_content);
@@ -143,6 +144,7 @@ int pcap_snd_pack(char *pkt, char *dev_name , int num){
         pcap_sendpacket(fp, (const u_char *)pkt, pack_real_len);
         printf("success\n") ;
         sleep(1) ;
+        //_sleep(5*30);
     }
     net_dev_close(fp) ;
     
@@ -155,7 +157,7 @@ int pcap_receive()
 
     char *dev,errbuf[1024];
     dev = (char*)malloc(8);
-    char compile[30];
+    char compile[200];
     memset(dev,0,sizeof(dev));
     strcpy(dev,DEV_NAME);
 
@@ -236,11 +238,12 @@ void pcap_callback(unsigned char * arg, const struct pcap_pkthdr *packet_header,
         int desfd;
         AllloT.mtx.lock_shared();
         for (auto it = AllloT.loTDB.begin(); it != AllloT.loTDB.end(); it++) {
-            if (it->ID == dlot.ID) {
+            if (strcmp(it->ID, dlot.ID) == 0) {
                 k = -1;
                 desfd = it->socketfd;
                 break;
             }
+            cout << it->ID << endl;
         }
         AllloT.mtx.unlock_shared();
         if (k == -1) {

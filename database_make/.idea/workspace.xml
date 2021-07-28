@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="48ed3ab2-8b6e-49cf-a910-87bdaa62fc16" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ProjectId" id="1ZT946KJ1NrV9Oi5ND2YHp3u5vL" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Graduation-project" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="48ed3ab2-8b6e-49cf-a910-87bdaa62fc16" name="Default Changelist" comment="" />
+      <created>1584852022905</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584852022905</updated>
+      <workItem from="1584852024334" duration="816000" />
+      <workItem from="1584880132665" duration="2527000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="719" y="200" key="FileChooserDialogImpl" timestamp="1584885456962">
+      <screen x="63" y="24" width="1855" height="864" />
+    </state>
+    <state x="719" y="200" key="FileChooserDialogImpl/63.24.1855.864@63.24.1855.864" timestamp="1584885456962" />
+    <state x="599" y="271" key="com.intellij.ide.util.TipDialog" timestamp="1584880600812">
+      <screen x="63" y="24" width="1855" height="864" />
+    </state>
+    <state x="599" y="271" key="com.intellij.ide.util.TipDialog/63.24.1855.864@63.24.1855.864" timestamp="1584880600812" />
+  </component>
+</project>

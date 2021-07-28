@@ -9,6 +9,7 @@
 
 const int  PORT = 8080;
 const char Myip[] = "127.0.0.1";
+
 loTDatabase AllloT;
 
 int main()

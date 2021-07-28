@@ -1,5 +1,6 @@
 #include "Socket_thread.h"
 #include "buff_processing.h"
+#include <unistd.h>
 #include <cstring>
 
 void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff *shared, int Type)
@@ -27,7 +28,7 @@ void Socket_Send(int socketfd_send, loT & Slot, struct shared_buff *shared, int 
 	
 	if (shared->buff[0] != 0) {
 		Write(socketfd_send, shared->buff, shared->buff_len);
-		memset(shared->buff, 0, N);
+		//memset(shared->buff, 0, N);
 		shared->buff_len = 0;
 	}
 }
@@ -51,6 +52,7 @@ void Socket_Recv(int & socketfd_recv, loT & Slot, struct shared_buff *shared)
 		strncpy(shared->buff, buffer, n);
         Socket_Send(socketfd_recv, Slot, shared, 2);
 		shared->mtx.unlock();
+		memset(buffer, 0, N*sizeof(char));
 	}
 	 
 }
@@ -101,8 +103,11 @@ void User_input(loT & lot, struct shared_buff *shared)
         shared->ready = true;
 		shared->buff_len = get_length(buffer);
 		strncpy(shared->buff, buffer, shared->buff_len);
+	//while(1){
         Socket_Send(lot.socketfd, lot, shared, SendM);
-		cout << "success send" << endl;
+		cout << "success send " << shared->buff << endl;
+	sleep(1);
+	//}
 		shared->mtx.unlock();
     }
 }

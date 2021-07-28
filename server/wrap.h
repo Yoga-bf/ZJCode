@@ -1,14 +1,14 @@
-#ifndef WRAP_H_
-#define WRAP_H_
-
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/socket.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h>
-#include <fcntl.h>
 
 void perr_exit(const char *s);
 int Accept(int fd, struct sockaddr *sa, socklen_t *salenptr);
@@ -19,5 +19,3 @@ int Socket(int family, int type, int protocol);
 ssize_t Read(int fd, void *ptr, size_t nbytes);
 ssize_t Write(int fd, const void *ptr, size_t nbytes);
 void Close(int fd);
-
-#endif
