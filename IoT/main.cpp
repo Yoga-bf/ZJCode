@@ -1,7 +1,7 @@
 #include <thread>
 #include <cstring>
 #include <unistd.h>
-#include "loT.h"
+#include "IoT.h"
 #include "ID.h"
 #include "Socket_thread.h"
 #include "buff_processing.h"

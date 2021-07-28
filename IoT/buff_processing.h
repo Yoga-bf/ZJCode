@@ -2,7 +2,7 @@
 #define BUFF_MYSOCKET_DEFINE_H
 
 
-#include "loT.h"
+#include "IoT.h"
 
 int buff_generate(char * buff, int Type, char * message, int n, loT & SloT, loT DloT = loT(DEFAULT_TYPE));
 int buff_generate(char * buff, int Type, char * message, int n, loT & SloT, string Did, char DIDType);

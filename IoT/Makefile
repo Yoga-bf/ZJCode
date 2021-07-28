@@ -1,5 +1,5 @@
 cc   = g++
-prom = lot
+prom = iot
 deps = $(shell find ./ -name "*.h")
 src  = $(shell  find ./ -name "*.cpp")
 obj  = $(src:%.cpp=%.o)

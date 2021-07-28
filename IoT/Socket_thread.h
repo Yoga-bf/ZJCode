@@ -6,7 +6,7 @@
 #include <thread>
 #include <mutex>
 #include "wrap.h"
-#include "loT.h"
+#include "IoT.h"
 
 const int  N            = 1024;
 struct shared_buff
